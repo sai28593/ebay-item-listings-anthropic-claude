@@ -1,99 +1,107 @@
-# Serverless Framework: eBay Item Listings with Anthropic Claude  
+# eBay Item Listings with Anthropic Claude and AWS
 
-This project demonstrates the use of the Serverless Framework to create eBay item listings by integrating Anthropic Claude for AI-powered content generation.  
+Welcome to the **eBay Item Listings Project**, an open-source solution that simplifies marketplace listing creation using the power of **Anthropic Claude** and **eBay APIs**, all hosted on **AWS Lambda** and **Bedrock**. This repository demonstrates how AI and cloud services can work together to automate repetitive tasks, saving time and effort for sellers and businesses.
 
----
+## Problem Statement
+Creating eBay marketplace listings is often a time-consuming and manual process. Sellers need to write item descriptions, ensure compliance with eBay's formatting requirements, and manage API integrations for publishing listings. This project addresses these challenges by:
 
-## **Development Setup**  
+- Automating the generation of optimized item descriptions.
+- Streamlining the process of creating, listing, and publishing items.
+- Reducing the overall time and effort required for marketplace operations.
 
-Follow the steps below to set up your development environment:  
+## Solution Overview
+This project integrates **Anthropic Claude**, an advanced generative AI model, with eBay's API using **AWS Lambda** and **Bedrock**. Key features include:
 
-### Prerequisites  
+- **AI-Powered Description Generation**: Generates high-quality, platform-compliant item descriptions using Anthropic Claude.
+- **eBay API Integration**: Automates workflows for creating items, listing offers, and publishing listings.
+- **Cloud Hosting**: Fully hosted on AWS Lambda and Bedrock for scalability and reliability.
 
-1. **Install Python**  
-   - Ensure Python 3.8.5 or above is installed.  
-   - [Download Python](https://www.python.org/downloads/).  
+## Features
+- **Automated Text Generation**: Quickly generates descriptive content that meets eBay's standards.
+- **Seamless API Workflows**: End-to-end integration with eBay API for item creation, offers, and publishing.
+- **Scalable Infrastructure**: Leverages AWS Lambda for serverless computing and Bedrock for AI model deployment.
 
-2. **Install AWS CLI**  
-   - Follow the [official AWS CLI installation guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).  
-   - Configure AWS CLI credentials:  
-     - Use [Option #2 from AWS Well-Architected Labs](https://wellarchitectedlabs.com/common/documentation/aws_credentials/#cli).  
-     - Example:  
-       ```
-       Access Key: <AWS Access Key>  
-       Secret Key: <AWS Secret Key>
-       Default Region: us-east-1  
-       Output Format: json  
-       ```  
+## Key Contributors
+- **Sai (Architect and Original Contributor)**: Designed and implemented the overall architecture, combining AI and cloud services.
+- **Geethika**: Led eBay API integration, focusing on creating items, listing offers, and publishing workflows.
+- **Rakesh**: Developed Bedrock-powered solutions for generating item descriptions and invoking eBay API for item creation.
 
-3. **Install NVM**  
-   - Use the [NVM installation guide](https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/) to install Node Version Manager.  
+## Getting Started
+### Prerequisites
+1. **AWS Account**: Set up AWS Lambda and Bedrock services.
+2. **eBay Developer Account**: Obtain eBay API credentials.
+3. **Node.js or Python**: Required for running scripts and managing dependencies.
 
-4. **Install Serverless Framework**  
-   - Run the following command to install Serverless globally:  
-     ```bash
-     npm install -g serverless@3.39.0  
-     ```  
-
----
-
-## **Deployment Steps**  
-
-1. Clone the repository:  
+### Installation
+1. Clone this repository:
    ```bash
-   git clone https://github.com/your-repo-name/ebay-item-listings  
-   cd ebay-item-listings  
-
+   git clone https://github.com/sai28593/ebay-item-listings-anthropic-claude.git
+   cd ebay-item-listings-anthropic-claude
+   ```
 2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure environment variables:
+   Create a `.env` file with the following:
+   ```env
+   EBAY_APP_ID=<your-ebay-app-id>
+   EBAY_CERT_ID=<your-ebay-cert-id>
+   EBAY_DEV_ID=<your-ebay-dev-id>
+   AWS_REGION=<your-aws-region>
+   BEDROCK_ENDPOINT=<your-bedrock-endpoint>
+   ```
 
-      ```
-      bash
-      npm install
-      ```
-  
-3. Deploy the application:
-    ```
-    bash
-    serverless deploy  
-    ```
-
-4. Upon successful deployment, you’ll see output similar to:
-    ```
-    bash
-    Deploying ebay-item-listings to stage dev (us-east-1)  
-    ✔ Service deployed to stack ebay-item-listings-dev (112s)  
-    functions:  
-      createListing: ebay-item-listings-dev-createListing (2 kB)
-    ```
-  
 ### Usage
+1. **Deploy to AWS Lambda**:
+   Use the deployment script or AWS CLI to upload the code to your Lambda function.
+   ```bash
+   npm run deploy
+   ```
+2. **Invoke the Function**:
+   Use AWS Lambda's console or CLI to invoke the function and generate eBay listings:
+   ```bash
+   aws lambda invoke --function-name CreateEbayListing output.json
+   ```
+3. **Test the Integration**:
+   Run sample tests to verify eBay API integration and text generation.
 
-Create eBay Item Listings
-Invoke the function locally for testing:
-bash
-serverless invoke local --function createListing --data '{"itemDetails": {"title": "Sample Product", "description": "A great item!"}}'  
-Invoke the deployed function:
-bash
-serverless invoke --function createListing --data '{"itemDetails": {"title": "Sample Product", "description": "A great item!"}}'  
-Expected output:
-json
+### Sample Input
+```json
 {
-    "statusCode": 200,
-    "body": "{\"message\": \"Item listing created successfully!\", \"listingId\": \"123456789\"}"
+  "itemTitle": "Wireless Headphones",
+  "itemCategory": "Consumer Electronics",
+  "itemPrice": 99.99,
+  "itemCondition": "New"
 }
-Dependencies and Plugins
-To include third-party Python dependencies for this project, install the serverless-python-requirements plugin:
+```
 
-Install the plugin:
+### Sample Output
+```json
+{
+  "listingId": "1234567890",
+  "status": "Published",
+  "description": "Brand-new wireless headphones with crystal-clear audio quality and long-lasting battery life. Perfect for everyday use."
+}
+```
 
-bash
-Copy code
-serverless plugin install -n serverless-python-requirements  
-Add dependencies to a requirements.txt file. For example:
+## How It Works
+1. **Generate Descriptions**: Bedrock invokes Anthropic Claude to create optimized item descriptions.
+2. **Integrate with eBay**: AWS Lambda uses eBay API to create the item, list the offer, and publish it.
+3. **End-to-End Automation**: Fully automated pipeline minimizes manual intervention.
 
-txt
-Copy code
-anthropic  
-boto3  
-The dependencies will be bundled with the Lambda package during the deployment process.
+## Contributing
+We welcome contributions! If you'd like to enhance this project, please:
+1. Fork the repository.
+2. Create a feature branch.
+3. Submit a pull request with detailed descriptions of your changes.
 
+## License
+This project is licensed under the [MIT License](LICENSE).
+
+## Feedback and Support
+For questions, feedback, or issues, please open an issue on GitHub or reach out to me directly.
+
+---
+
+Happy coding! Let’s make marketplace listings smarter and faster. 🎉
