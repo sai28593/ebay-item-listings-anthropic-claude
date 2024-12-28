@@ -1,0 +1,31 @@
+service: pawn-ebay-lister
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  #environment:
+    #EBAY_OAUTH_TOKEN: ${env:EBAY_OAUTH_TOKEN}
+  role: <ARN>
+  memorySize: 512
+  # Loads from the .env file
+
+functions:
+  ebay_service:
+    handler: ebay_handler.ebay_request_processor
+    events:
+    - http:
+        path: ebay_request_path
+        method: post
+
+  bedrock_service:
+    handler: bedrock_handler.create_product
+    events:
+      - http:
+          path: generate-description
+          method: post
+
+plugins:
+  - serverless-dotenv-plugin
